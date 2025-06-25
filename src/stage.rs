@@ -1,10 +1,11 @@
+use crate::Collideable;
 use macroquad::prelude::*;
 
-struct Block {
-    x: f32,
-    y: f32,
-    width: f32,
-    height: f32,
+pub struct Block {
+    pub x: f32,
+    pub y: f32,
+    pub width: f32,
+    pub height: f32,
 }
 
 impl Block {
@@ -22,15 +23,21 @@ impl Block {
     }
 }
 
+impl Collideable for Block {
+    fn bounding_box(&self) -> (f32, f32, f32, f32) {
+        (self.x, self.y, self.width, self.height)
+    }
+}
+
 pub struct Stage {
-    stage: Block,
-    platforms: [Block; 3],
+    pub main: Block,
+    pub platforms: [Block; 3],
 }
 
 impl Stage {
     pub fn new() -> Self {
         Self {
-            stage: Block::new(
+            main: Block::new(
                 screen_width() / 2.0 - 600.0,
                 screen_height() - 300.0,
                 1200.0,
@@ -61,7 +68,7 @@ impl Stage {
 
     pub fn draw(&self) {
         // Draw stage and platforms
-        self.stage.draw();
+        self.main.draw();
         for platform in &self.platforms {
             platform.draw();
         }

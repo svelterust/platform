@@ -10,7 +10,7 @@ async fn main() {
     // Game logic
     loop {
         clear_background(LIGHTGRAY);
-        player.update();
+        player.update(&stage);
         player.draw();
         stage.draw();
         next_frame().await
