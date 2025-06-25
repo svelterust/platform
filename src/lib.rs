@@ -6,6 +6,9 @@ pub mod stage;
 pub use player::Player;
 pub use stage::Stage;
 
+// Simple Result type
+pub type Result<T> = std::result::Result<T, Box<dyn std::error::Error>>;
+
 // Window configuration
 use macroquad::prelude::Conf;
 

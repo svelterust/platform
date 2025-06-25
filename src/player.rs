@@ -8,6 +8,7 @@ pub struct Player {
     pub height: f32,
     pub h_speed: f32,
     pub v_speed: f32,
+    pub jumps: u32,
 }
 
 impl Collideable for Player {
@@ -25,6 +26,7 @@ impl Player {
             height: 64.0,
             h_speed: 0.0,
             v_speed: 0.0,
+            jumps: 2,
         }
     }
 
@@ -40,8 +42,9 @@ impl Player {
         if is_key_down(KeyCode::Down) {
             self.v_speed += 1.0;
         }
-        if is_key_down(KeyCode::Space) {
-            self.v_speed = 7.0;
+        if is_key_pressed(KeyCode::Space) && self.jumps > 0 {
+            self.v_speed = 9.0;
+            self.jumps -= 1;
         }
 
         // Movement
@@ -67,6 +70,9 @@ impl Player {
                 self.y -= dy.signum();
                 if dy != 0.0 {
                     self.v_speed = 0.0;
+                }
+                if dy > 0.0 && self.jumps < 2 {
+                    self.jumps = 2;
                 }
                 break;
             }
