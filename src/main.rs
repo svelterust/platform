@@ -2,24 +2,33 @@ use raylib::prelude::*;
 
 #[derive(Default)]
 struct Player {
-    x: i32,
-    y: i32,
+    pos: Vector2,
+    speed: Vector2,
 }
 
 impl Player {
     fn update(&mut self, rl: &RaylibHandle) {
-        if rl.is_key_down(KeyboardKey::KEY_UP) { self.y -= Player::SPEED; }
-        if rl.is_key_down(KeyboardKey::KEY_DOWN) { self.y += Player::SPEED; }
-        if rl.is_key_down(KeyboardKey::KEY_LEFT) { self.x -= Player::SPEED; }
-        if rl.is_key_down(KeyboardKey::KEY_RIGHT) { self.x += Player::SPEED; }
+        if rl.is_key_pressed(KeyboardKey::KEY_SPACE) { self.speed.y = Player::JUMP; }
+        if rl.is_key_down(KeyboardKey::KEY_LEFT) { self.pos.x -= Player::RUN; }
+        if rl.is_key_down(KeyboardKey::KEY_RIGHT) { self.pos.x += Player::RUN; }
+
+        // Gravity
+        self.pos.y -= self.speed.y;
+        if self.speed.y > -10.0 {
+            self.speed.y -= Player::GRAVITY;
+        }
     }
     
     fn draw(&self, d: &mut RaylibDrawHandle<'_>) {
-        d.draw_rectangle(self.x, self.y, 64, 64, Color::BLACK);        
+        d.draw_rectangle(self.pos.x as i32, self.pos.y as i32, Self::WIDTH, Self::HEIGHT, Color::BLACK);
     }
 
     // Constants
-    const SPEED: i32 = 3;
+    const RUN: f32 = 5.0;
+    const JUMP: f32 = 10.0;
+    const GRAVITY: f32 = 0.3;
+    const WIDTH: i32 = 64;
+    const HEIGHT: i32 = 64;
 }
 
 fn main() {
