@@ -31,6 +31,21 @@ impl Player {
     const HEIGHT: i32 = 64;
 }
 
+#[derive(Default)]
+struct World {
+    player: Player,
+}
+
+impl World {
+    fn update(&mut self, rl: &RaylibHandle) {
+        self.player.update(rl);
+    }
+    
+    fn draw(&self, d: &mut RaylibDrawHandle<'_>) {
+        self.player.draw(d);
+    }
+}
+
 fn main() {
     // Setup
     let (mut rl, thread) = raylib::init()
@@ -38,13 +53,13 @@ fn main() {
         .title("Platform")
         .vsync()
         .build();
-    let mut player = Player::default();
 
     // Game loop
+    let mut world = World::default();
     while !rl.window_should_close() {
-        player.update(&rl);
+        world.update(&rl);
         let mut d = rl.begin_drawing(&thread);
         d.clear_background(Color::WHITE);
-        player.draw(&mut d);
+        world.draw(&mut d);
     }
 }
